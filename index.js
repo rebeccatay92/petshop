@@ -3,9 +3,8 @@ const Sequelize = require('sequelize')
 
 /* ----- setting up database config ------ */
 
-// [dev] refers to object dev in config.json. if multiple env replace with [env], then config.json has multiple envs dev, prod, test
+// can replace [dev] with [env]
 const config = require('./config/config.json')['development']
-// console.log(config)
 
 var sequelize = new Sequelize(config.database, config.username, config.password, config)
 
@@ -19,18 +18,28 @@ Object.keys(db).forEach(function (modelName) {
     db[modelName].associate(db)
   }
 })
-console.log(db)
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connection has been established successfully.')
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err)
+  })
 
 /* -----express routing and port ------ */
 const app = express()
 app.get('/', function (req, res) {
-  res.send('hello from root')
+  res.render('index.html')
 })
 const port = process.env.PORT || 3000
 app.listen(port, function () {
   console.log(`express is running on ${port}`)
 })
+
+/* ----- testing assocs from backend ------ */
+console.log('hello this is backend console')
