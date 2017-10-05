@@ -38,8 +38,19 @@ app.get('/', function (req, res) {
 })
 const port = process.env.PORT || 3000
 app.listen(port, function () {
-  console.log(`express is running on ${port}`)
+  console.log(`express is running on port ${port}`)
 })
 
 /* ----- testing assocs from backend ------ */
 console.log('hello this is backend console')
+db.Owner.findAll({
+  include: [{
+    model: db.Pet
+  }]
+})
+.then(function (found) {
+  var results = found.map(function (e) {
+    return e.dataValues
+  })
+  console.log(results)
+})
